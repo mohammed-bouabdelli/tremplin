@@ -1,271 +1,183 @@
-# Tremplin
+# Tremplin - Internship & Employment Platform
 
-> Web platform for managing trainees and job/internship offers for **ISTA Khemisset**.
-
-**Tremplin** connects ISTA trainees to professional opportunities: trainees create their profiles, indicate their employment status, build their CVs online, and apply for offers published by the administration. The administration facilitates the connection by centralizing applications and sharing qualified profiles with partner companies.
-
-![Tremplin](https://img.shields.io/badge/Laravel-11-red) ![React](https://img.shields.io/badge/React-18-blue) ![PHP](https://img.shields.io/badge/PHP-8.3-purple) ![Node](https://img.shields.io/badge/Node-20%2B-green)
+A modern platform for managing trainees, internship and job opportunities for ISTA Khemisset.
 
 ---
 
-## Table of Contents
+## Setup
 
-1. [Technical Stack](#technical-stack)
-2. [Monorepo Structure](#monorepo-structure)
-3. [Prerequisites Installation](#prerequisites-installation)
-   - [Windows](#windows)
-   - [macOS](#macos)
-   - [Linux (Ubuntu/Debian)](#linux-ubuntudebian)
-4. [Project Setup](#project-setup)
-5. [Running the Application](#running-the-application)
-6. [Demo Accounts](#demo-accounts)
-7. [Testing](#testing)
-8. [Useful Commands](#useful-commands)
-9. [Troubleshooting](#troubleshooting)
-
----
-
-## Technical Stack
-
-- **Frontend**: React 18 (JavaScript / JSX) + Vite + Tailwind CSS
-- **Backend**: Laravel 11 + PHP 8.3 + Sanctum (Token-based auth)
-- **Database**: MySQL 8 (XAMPP for dev, dedicated server for prod)
-- **Employment Tracking**: Each trainee indicates if they are employed or looking for a job
-- **CV**: Real-time PDF generation (`jsPDF` + `html2canvas`)
-- **Mail**: Configurable SMTP (default to log in dev)
-
-## Monorepo Structure
-
-```
-tremplin/
-├── backend/                   # Laravel 11 API
-├── frontend/                  # React 18 SPA (JS/JSX) + Vite + Tailwind
-├── docs/                      # Documentation
-└── README.md
-```
-
----
-
-## Prerequisites Installation
-
-You need **3 tools**: **PHP 8.3+**, **Node 20+**, **Composer 2**, and **XAMPP** (for local MySQL). Choose your platform below.
-
-### Windows
-
-**Option A — Official Installers (Recommended for beginners)**
-
-1. **PHP 8.3**: Download `php-8.3.x-Win32-vs16-x64.zip` from [windows.php.net/download](https://windows.php.net/download/), extract to `C:\php`, then add `C:\php` to your `PATH` (System Settings → Environment Variables).
-   - Rename `php.ini-development` to `php.ini` and uncomment the following extensions: `extension=curl`, `extension=fileinfo`, `extension=gd`, `extension=mbstring`, `extension=openssl`, `extension=pdo_mysql`, `extension=zip`.
-2. **Composer**: Download the installer [getcomposer.org/Composer-Setup.exe](https://getcomposer.org/Composer-Setup.exe) and run it.
-3. **Node 20+**: Download the LTS installer from [nodejs.org](https://nodejs.org/) → "LTS".
-4. **Git**: [git-scm.com/download/win](https://git-scm.com/download/win).
-5. **XAMPP**: Download from [apachefriends.org](https://www.apachefriends.org/) and install (includes MySQL).
-
-**Option B — Chocolatey (Faster if you are familiar)**
-
-```powershell
-# In PowerShell as Administrator
-choco install php composer nodejs-lts git -y
-```
-
-**Verification:**
-```powershell
-php --version        # should show 8.3.x
-composer --version   # should show 2.x
-node --version       # should show v20.x or higher
-git --version
-```
-
-### macOS
-
-**With Homebrew** (Recommended — [brew.sh](https://brew.sh/) to install if you don't have it):
+### Step 1 - Clone Project
 
 ```bash
-brew install php@8.3 composer node git
-brew link --force --overwrite php@8.3
+git clone https://github.com/mohammed-bouabdelli/tremplin.git
+cd tremplin
+code .
 ```
 
-**For MySQL, install XAMPP from [apachefriends.org](https://www.apachefriends.org/).**
+---
 
-**Verification:**
+### Step 2 - Install Requirements
+
+Make sure you have the following installed:
+
+- PHP 8.3+
+- Composer
+- Node.js 20+
+- npm
+- MySQL 8+
+
+Check if everything is installed:
+
 ```bash
 php --version
 composer --version
 node --version
-git --version
-```
-
-### Linux (Ubuntu/Debian)
-
-```bash
-# PHP 8.3 + necessary extensions
-sudo add-apt-repository ppa:ondrej/php -y
-sudo apt update
-sudo apt install -y php8.3 php8.3-cli php8.3-mbstring php8.3-xml php8.3-curl \
-  php8.3-zip php8.3-gd php8.3-mysql unzip git
-
-# Composer
-curl -sS https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer
-
-# Node 20+ (via NodeSource)
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs
-
-# For MySQL, install XAMPP from [apachefriends.org](https://www.apachefriends.org/).
-```
-
-**Verification:**
-```bash
-php --version && composer --version && node --version
+npm --version
+mysql --version
 ```
 
 ---
 
-## Project Setup
+### Step 3 - Create Configuration Files
 
-Once the prerequisites are installed, the following commands work **the same on Windows / macOS / Linux** (use PowerShell, Terminal, or Bash).
-
-### 1. Clone the repository
+Backend:
 
 ```bash
-git clone https://github.com/aymanbelarbi/tremplin.git
-cd tremplin
+cd backend
+copy .env.example .env
 ```
 
-### 2. Configure the backend
+Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Mac/Linux:
+
+```bash
+cp .env.example .env
+```
+
+Then configure your database and application settings inside:
+
+```text
+backend/.env
+```
+
+---
+
+### Step 4 - Install Dependencies
+
+Backend:
 
 ```bash
 cd backend
 composer install
-```
-
-**Create the `.env` file:**
-
-- **macOS / Linux:** `cp .env.example .env`
-- **Windows (PowerShell):** `Copy-Item .env.example .env`
-- **Windows (CMD):** `copy .env.example .env`
-
-**Start MySQL via XAMPP:**
-
-- Open XAMPP Control Panel and start MySQL.
-- Open phpMyAdmin (usually http://localhost/phpmyadmin) and create a database named `tremplin`.
-
-These values are already in `.env.example` — no changes needed.
-
-**Generate key + migrate + seed with demo data:**
-
-```bash
 php artisan key:generate
-php artisan migrate:fresh --seed
 ```
 
-> ⚡ This command creates the database + an admin account. Trainees register via the public registration form.
-
-### 3. Configure the frontend
-
-In a **new terminal** (keep the first one open):
+Frontend:
 
 ```bash
-cd tremplin/frontend
+cd ../frontend
 npm install
 ```
 
 ---
 
-## Running the Application
+### Step 5 - Setup Database
 
-**Two terminals in parallel:**
+Create a MySQL database for the project, then update the database configuration in:
 
-### Terminal 1 — Backend (Laravel)
+```text
+backend/.env
+```
+
+Run migrations and seed the database:
 
 ```bash
-cd tremplin/backend
+cd backend
+php artisan migrate --seed
+```
+
+---
+
+### Step 6 - Start Everything
+
+Start the backend:
+
+```bash
+cd backend
 php artisan serve
 ```
 
-→ API available at **http://localhost:8000**
-
-### Terminal 2 — Frontend (Vite)
+Then open another terminal and start the frontend:
 
 ```bash
-cd tremplin/frontend
+cd frontend
 npm run dev
 ```
 
-→ Interface available at **http://localhost:5173** (or the port displayed in the console)
+Open your browser and go to:
 
-The frontend automatically redirects `/api` calls to the backend. **Open http://localhost:5173 in your browser to get started.**
-
----
-
-## Demo Accounts
-
-| Role  | Email                | Password           |
-|-------|----------------------|--------------------|
-| Admin | `admin@tremplin.ma`  | `tremplin --admin` |
-
-You can also create a new trainee account via public registration at `/inscription`.
+[http://localhost:5173](http://localhost:5173)
 
 ---
 
-## Testing
+## Admin Account
+
+The seeded default administrator account is:
+
+- Email: `admin@example.com`
+- Password: `password`
+
+---
+
+## Common Commands
+
+Run backend server:
 
 ```bash
-# Backend (Pest)
 cd backend
-php artisan test                   # all tests
-php artisan test --filter=CvTest   # single file
+php artisan serve
+```
 
-# Frontend
+Run frontend:
+
+```bash
 cd frontend
-npm run lint    # ESLint
-npm run build   # check if build passes
+npm run dev
 ```
 
----
-
-## Useful Commands
-
-### Backend
+Run migrations:
 
 ```bash
-php artisan migrate:fresh --seed   # full reset + re-seed demo
-php artisan db:seed --class=AdminSeeder  # seed only the admin
-php artisan queue:work             # process background jobs
-php artisan tinker                 # Laravel REPL
+cd backend
+php artisan migrate
 ```
 
-### Frontend
+Run seeders:
 
 ```bash
-npm run dev      # dev server with HMR
-npm run build    # production build (dist/)
-npm run preview  # preview the build
-npm run lint     # ESLint
+php artisan db:seed
 ```
 
----
+Reset database:
 
-## Troubleshooting
+```bash
+php artisan migrate:fresh --seed
+```
 
-| Problem | Solution |
-|---|---|
-| `php: command not found` | PHP is not in your `PATH`. Check installation, restart your terminal. |
-| `SQLSTATE[HY000] [2002]` on startup | MySQL is unreachable. Check if XAMPP MySQL is running in the XAMPP Control Panel. |
-| `SQLSTATE[HY000] [1045] Access denied` | Wrong credentials. Check if `.env` contains `DB_USERNAME=root` and `DB_PASSWORD=` (empty). Ensure the database `tremplin` exists in XAMPP phpMyAdmin. |
-| `Port 8000 already in use` | Another backend is running. Change port: `php artisan serve --port=8001`. |
-| `Port 5173 already in use` | Vite automatically takes the next one (5174, 5175...). Check console. |
-| Symfony Process error (Windows) | Open PowerShell as Administrator or add antivirus exception. |
-| `composer install` fails on `ext-gd` | Enable GD extension in `php.ini` (uncomment `extension=gd`). |
-| `npm install` fails on `sharp` or `node-gyp` | Install build tools: `npm install -g windows-build-tools` (Windows) or `xcode-select --install` (macOS). |
-| Profile photos not showing | Photos are served via an API route (`/api/v1/storage/`), so **no `storage:link` symlink is needed**. If photos still don't appear, check that the `backend/storage/app/public/photos/` directory exists and has files. |
-| `storage:link` fails on Windows | Not required — the app serves files through a Laravel route instead of a symlink. |
+Clear Laravel cache:
 
-If you get stuck, open a [GitHub issue](https://github.com/aymanbelarbi/tremplin/issues) with the full error message + your platform (Windows/macOS/Linux) + PHP, Node, Composer versions.
+```bash
+php artisan optimize:clear
+```
 
----
+Build frontend for production:
 
-## License
-
-Project completed as part of an internship at **ISTA Khemisset**. Educational use.
+```bash
+cd frontend
+npm run build
+```
